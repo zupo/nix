@@ -37,4 +37,6 @@
   ];
 
   programs.bash.enableCompletion = true;
+  time.timeZone = "Europe/Ljubljana";
+  networking.hostName = "tv";
 }
