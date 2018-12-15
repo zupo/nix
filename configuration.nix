@@ -35,4 +35,6 @@
     screen
     telnet
   ];
+
+  programs.bash.enableCompletion = true;
 }
