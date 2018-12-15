@@ -23,7 +23,7 @@
 
   environment.systemPackages = with pkgs; [
     vimHugeX
-    gitFull
+    git
     wget
     curl
     pwgen
