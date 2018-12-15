@@ -21,4 +21,18 @@
     permitRootLogin = "yes";
   };
 
+  environment.systemPackages = with pkgs; [
+    vimHugeX
+    gitFull
+    wget
+    curl
+    pwgen
+    links2
+    ncdu
+    iftop
+    iotop
+    rsync
+    screen
+    telnet
+  ];
 }
