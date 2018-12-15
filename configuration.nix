@@ -91,6 +91,9 @@
 
     [help]
       autocorrect = 1
+
+    [credential]
+      helper = cache
   '';
 
   environment.etc."gitignore".text = ''
