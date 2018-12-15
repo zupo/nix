@@ -22,7 +22,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    vimHugeX
+    (import ./vim.nix)
     git
     wget
     curl
