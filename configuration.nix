@@ -48,7 +48,8 @@
 
   services.openssh = {
     enable = true;
-    permitRootLogin = "yes";
+    permitRootLogin = "no";
+    passwordAuthentication = false;
   };
 
   # Enable the X11 windowing system
