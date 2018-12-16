@@ -16,7 +16,6 @@
       device = "/dev/disk/by-label/NIXOS_SD";
       fsType = "ext4";
     };
-
   fileSystems."/mnt/nas" = {
       device = "//NAS/media";
       fsType = "cifs";
@@ -27,10 +26,9 @@
       in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
     };
   
-  
   # Speed up builds
   nix.buildCores = 4;
-  
+
   # TODO: kodi now uses openjdk so this might not be needed any more?
   nixpkgs.config = {
     allowUnfree = true;
@@ -46,6 +44,10 @@
     nameservers = [ "10.9.3.1" ];
  };
 
+  # NTP clock synchronization
+  services.timesyncd.enable = true;
+
+  # Harden SSH
   services.openssh = {
     enable = true;
     permitRootLogin = "no";
