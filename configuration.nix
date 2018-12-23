@@ -18,10 +18,24 @@
       fsType = "ext4";
     };
   };
+  
+  # Speed up builds
   nix.buildCores = 4;
+  
+  # TODO: kodi now uses openjdk so this might not be needed any more?
   nixpkgs.config = {
     allowUnfree = true;
   };
+
+  networking = {
+    hostName = "tv";
+    interfaces.eth0.ipv4.addresses = [{
+        address = "10.9.3.10";
+        prefixLength = 24;
+    }];
+    defaultGateway = "10.9.3.1";
+    nameservers = [ "10.9.3.1" ];
+ };
 
   services.openssh = {
     enable = true;
@@ -60,7 +74,6 @@
 
   programs.bash.enableCompletion = true;
   time.timeZone = "Europe/Ljubljana";
-  networking.hostName = "tv";
 
   users.users.zupo = {
     isNormalUser = true;
