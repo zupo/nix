@@ -12,12 +12,21 @@
   boot.kernelParams = ["cma=256M"];
 
   # File systems configuration for using the installer's partition layout
-  fileSystems = {
-    "/" = {
+  fileSystems."/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
       fsType = "ext4";
     };
-  };
+
+  fileSystems."/mnt/nas" = {
+      device = "//NAS/media";
+      fsType = "cifs";
+      options = let
+        # this line prevents hanging on network split
+        automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
+
+      in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
+    };
+  
   
   # Speed up builds
   nix.buildCores = 4;
