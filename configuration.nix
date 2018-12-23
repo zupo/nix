@@ -8,6 +8,9 @@
   # if you have a Raspberry Pi 2 or 3, pick this:
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Needed for the virtual console to work on the RPi 3, as the default of 16M doesn't seem to be enough
+  boot.kernelParams = ["cma=256M"];
+
   # File systems configuration for using the installer's partition layout
   fileSystems = {
     "/" = {
@@ -25,16 +28,20 @@
     permitRootLogin = "yes";
   };
 
-  services.xserver = {
-    enable = true;
-    videoDrivers = [ "modesetting" ];
-    desktopManager.default = "kodi";
-    desktopManager.kodi.enable = true;
-    displayManager.lightdm.autoLogin.user = "kodi";
-    displayManager.lightdm.autoLogin.enable = true;
-    displayManager.lightdm.enable = true;
-    windowManager.default = "none";
-  };
+  # Enable the X11 windowing system
+  services.xserver.enable = true;
+  services.xserver.videoDrivers = [ "modesetting" ];
+
+  # Enable Kodi
+  services.xserver.desktopManager.kodi.enable = true;
+
+  # Enable slim autologin
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.displayManager.lightdm.autoLogin.enable = true;
+  services.xserver.displayManager.lightdm.autoLogin.user = "kodi";
+
+  # Define a user account
+  users.extraUsers.kodi.isNormalUser = true;
 
   environment.systemPackages = with pkgs; [
     (import ./vim.nix)
@@ -59,11 +66,6 @@
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC3mRrO/NGw6q9wysAFmtqw8jKy7U4R5o3Hb/CnbAKnuJAlAOJX4gXzkXEHJF++6sm4cEe8GPvdfWwgTM8ysV53qQCVlmCCbcYvel4WkpOAJqsWljuwCtoDpYRoGhM4EvPe4oFmZ7sHKKFqCA03eIohG32wXmHvc3BQCD6YbvT8r6gg39XDiM3cwxsro6y8qCeo4I+qnPtt3bksMU2QgzCj3G3tytW2ZhYmEQL9Cu8PGxXVNXvBtBwLJtUq6MV5aoF/DKImD7zc7sYA+kRH+NXtFtrD3IdW3/eTpOIZTN95cyx4sAkx4zF8Pxefww4YugH+cYo9ZFFlxidnHThQSJRZL0DwAdVK7rpNxW5538snAZclQx6F9PdmesJ60Kqn+h92OnoEFSjuY0Tct2qdXou10gJmspCu0VnFIntDOxIAGrvNFC3mHYLhhwf84YnoGOt0yaIF9K9ewevxcxjnKp9BXTEcMxvPCXieoIhF01hp9GssmcRNLqNyqNNgi1pgLDSkaFetq+liw15jsK6t4vYHfjMqg9ynZ9P/wrVl8hUZ0KK+DLyrUdAFO4oUxRwFyz1uv71RoYV7MDWi+XdxycR4cGdBwg//BV5+zPOIf+4gpVT6TQPi0svymYbBNLoQRbMEQHXiTmgPdQ09npIIQ9xyClP1KE1CpaFkCJ/lQWtmrQ==" ];
-  };
-
-  users.users.kodi = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "root" ];
   };
 
   environment.etc."gitconfig".text = ''
