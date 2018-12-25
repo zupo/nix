@@ -26,14 +26,6 @@
       in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
     };
   
-  # Speed up builds
-  nix.buildCores = 4;
-
-  # TODO: kodi now uses openjdk so this might not be needed any more?
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-
   networking = {
     hostName = "tv";
     interfaces.eth0.ipv4.addresses = [{
