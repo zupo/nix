@@ -69,6 +69,14 @@
   # Define a user account
   users.extraUsers.kodi.isNormalUser = true;
 
+  # Filter incoming traffic
+  networking.firewall.enable = true;
+  networking.firewall.allowPing = true;
+  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.allowedUDPPorts = [ ];
+
+  environment.variables.EDITOR = "vim";
+
   environment.systemPackages = with pkgs; [
     (import ./vim.nix)
     git
@@ -86,7 +94,16 @@
   ];
 
   programs.bash.enableCompletion = true;
+  programs.ssh.startAgent = true;
   time.timeZone = "Europe/Ljubljana";
+
+  # Cleanup to preserve space on the SD
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 7d";
+  boot.cleanTmpDir = true;
+
+  # Preserve space and make builds faster by sacrificing documentation
+  services.nixosManual.enable = false;
 
   users.users.zupo = {
     isNormalUser = true;
