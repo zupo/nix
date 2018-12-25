@@ -11,6 +11,14 @@
   # Needed for the virtual console to work on the RPi 3, as the default of 16M doesn't seem to be enough
   boot.kernelParams = ["cma=256M"];
 
+  hardware.firmware = [ pkgs.raspberrypifw ];
+  boot.loader.raspberryPi.enable = true;
+  boot.loader.raspberryPi.version = 3;
+  boot.loader.raspberryPi.uboot.enable = true;
+  boot.loader.raspberryPi.firmwareConfig = ''
+    gpu_mem=256
+  '';
+
   # File systems configuration for using the installer's partition layout
   fileSystems."/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
@@ -74,6 +82,7 @@
     rsync
     screen
     telnet
+    raspberrypi-tools
   ];
 
   programs.bash.enableCompletion = true;
