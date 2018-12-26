@@ -2,8 +2,6 @@
 {
   # NixOS wants to enable GRUB by default
   boot.loader.grub.enable = false;
-  # Enables the generation of /boot/extlinux/extlinux.conf
-  boot.loader.generic-extlinux-compatible.enable = true;
 
   # if you have a Raspberry Pi 2 or 3, pick this:
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -11,7 +9,6 @@
   # Needed for the virtual console to work on the RPi 3, as the default of 16M doesn't seem to be enough
   boot.kernelParams = ["cma=256M"];
 
-  hardware.firmware = [ pkgs.raspberrypifw ];
   boot.loader.raspberryPi.enable = true;
   boot.loader.raspberryPi.version = 3;
   boot.loader.raspberryPi.uboot.enable = true;
@@ -33,7 +30,7 @@
 
       in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
     };
-  
+
   networking = {
     hostName = "tv";
     interfaces.eth0.ipv4.addresses = [{
@@ -54,7 +51,7 @@
     passwordAuthentication = false;
   };
 
-  # Enable the X11 windowing system
+  # Enable X11 windowing system
   services.xserver.enable = true;
   services.xserver.videoDrivers = [ "modesetting" ];
 

@@ -30,11 +30,11 @@
     };
   };
 
-  # !!! Adding a swap file is optional, but strongly recommended!
-  # swapDevices = [ { device = "/swapfile"; size = 1024; } ];
-
-  # Preserve space and make builds faster by sacrificing documentation
+  # Preserve space by sacrificing documentation and history
   services.nixosManual.enable = false;
+  nix.gc.automatic = true;
+  nix.gc.options = "--delete-older-than 30d";
+  boot.cleanTmpDir = true;
 
   # Configure basic SSH access
   services.openssh.enable = true;
