@@ -134,6 +134,14 @@ Let's try one for practice: the home theater software Kodi.
 
 2. Run `nixos-rebuild switch` and `reboot` when it's done.
 
+## Where to go from here?
+
+- I really liked the [one hour, hands-on tutorial](https://github.com/brainrape/nixos-tutorial) when starting out. I got the basic knowledge needed to follow the official NixOS documentation.
+
+- Check out the fully-fledged [`tv.nix`](https://github.com/zupo/nix/tree/master/tv.nix) configuration I use on my Raspberry Pi. In there you have static IP configuration, automounting of NAS, importing from other `.nix` files and more.
+
+- Keep the [cheatsheet](https://github.com/brainrape/nixos-tutorial/blob/master/cheatsheet.md) handy.
+
 
 ## Thanks
 

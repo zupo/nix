@@ -15,4 +15,3 @@
     # Define a user account
     users.extraUsers.kodi.isNormalUser = true;
 }
-
