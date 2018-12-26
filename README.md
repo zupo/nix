@@ -116,20 +116,22 @@ Let's try one for practice: the home theater software Kodi.
 1. Add the following to `/etc/nixos/configuration.nix`:
 
     ```nix
-    # Enable X11 windowing system
-    services.xserver.enable = true;
-    services.xserver.videoDrivers = [ "modesetting" ];
+    {
+        # Enable X11 windowing system
+        services.xserver.enable = true;
+        services.xserver.videoDrivers = [ "modesetting" ];
 
-    # Enable Kodi
-    services.xserver.desktopManager.kodi.enable = true;
+        # Enable Kodi
+        services.xserver.desktopManager.kodi.enable = true;
 
-    # Enable slim autologin
-    services.xserver.displayManager.lightdm.enable = true;
-    services.xserver.displayManager.lightdm.autoLogin.enable = true;
-    services.xserver.displayManager.lightdm.autoLogin.user = "kodi";
+        # Enable slim autologin
+        services.xserver.displayManager.lightdm.enable = true;
+        services.xserver.displayManager.lightdm.autoLogin.enable = true;
+        services.xserver.displayManager.lightdm.autoLogin.user = "kodi";
 
-    # Define a user account
-    users.extraUsers.kodi.isNormalUser = true;
+        # Define a user account
+        users.extraUsers.kodi.isNormalUser = true;
+    }
     ```
 
 2. Run `nixos-rebuild switch` and `reboot` when it's done.
