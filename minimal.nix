@@ -30,9 +30,6 @@
     };
   };
 
-  # !!! Adding a swap file is optional, but strongly recommended!
-  # swapDevices = [ { device = "/swapfile"; size = 1024; } ];
-
   # Preserve space and make builds faster by sacrificing documentation
   services.nixosManual.enable = false;
 
