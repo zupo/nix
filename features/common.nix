@@ -22,7 +22,7 @@
   programs.ssh.startAgent = true;
   services.openssh = {
     enable = true;
-    permitRootLogin = "no";
+    permitRootLogin = lib.mkForce "no";
     passwordAuthentication = false;
   };
 
@@ -151,4 +151,5 @@
     *.html.py
     *.egg
     *.Python
+  '';
 }
