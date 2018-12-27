@@ -52,7 +52,7 @@
   environment.etc."gitconfig".text = ''
     [user]
       name = Nejc Zupan
-      email = ${ builtins.readFile ./secrets/email }
+      email = ${ builtins.readFile /etc/nixos/secrets/email }
 
     [core]
       editor = vim
