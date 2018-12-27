@@ -41,6 +41,7 @@ If you are just testing things out, you can skip this for now. But when you are 
     $ umount /dev/sdb2
 
     $ sudo parted
+    (parted) print
     GNU Parted 3.2
     ...
     Disk /dev/sdb: 16.0GB
@@ -66,7 +67,6 @@ If you are just testing things out, you can skip this for now. But when you are 
      3       14.0GB   16.0GB   1981MB   primary   linux-swap(v1)  lba
 
     (parted) quit
-    $ sudo mkswap -L swap /dev/sdb3
 
 ### First boot
 
@@ -84,7 +84,7 @@ commands. I'm a creature of comfort:
 
     ```bash
     ~ $ ssh root@<Pi's IP>
-    [root@nixos:~]# nix-channel --list 
+    [root@nixos:~]# nix-channel --list
     nixos https://nixos.org/channels/nixos-unstable
 
     # The pre-built ARM image that we downloaded and flashed onto the SD card
@@ -93,7 +93,7 @@ commands. I'm a creature of comfort:
     # Let's use the latest *stable* NixOS release.
 
     [root@nixos:~]# nix-channel --remove nixos
-    [root@nixos:~]# nix-channel --add https://nixos.org/channels/nixos-18.09
+    [root@nixos:~]# nix-channel --add https://nixos.org/channels/nixos-18.09 nixos
 
     [root@nixos:~]# nix-channel --list
     nixos https://nixos.org/channels/nixos-18.09
@@ -118,7 +118,18 @@ commands. I'm a creature of comfort:
     ...
     ```
 
-5. And we're ready to build our minimal configuration.
+5. If you followed the advice and [prepared a swap partition in advance](https://github.com/zupo/nix#creating-the-swap-partition) you can now enable it.
+
+    ```bash
+    [root@nixos:~]# mkswap -L swap /dev/mmcblk0p3
+
+    # append the following to your configuration.nix
+    [root@nixos:~]# nano /etc/nixos/configuration.nix
+    ...
+        swapDevices = [ { label = "swap"; }];
+    }
+
+6. And we're ready to build our minimal configuration.
 
     ```bash
     [root@nixos:~]# nixos-rebuild switch
@@ -131,7 +142,7 @@ commands. I'm a creature of comfort:
 
     Building will take some time and generate [lots of output](https://github.com/zupo/nix/blob/master/minimal.output). For me it took a little over an hour. Remember we told nix we want to use the latest stable release of NixOS, instead of the bleeding edge, so the entire distribution needs to be downloaded, built and configured.
 
-6. Reboot.
+7. Reboot.
 
 ### Cleanup
 
@@ -190,14 +201,10 @@ Let's try one for practice: the home theater software Kodi.
 ## TODO
 
 * Update `configuration.nix` to use minimal.nix and features/.
-* Figure out how to elegantly add a swap partition to the SD card
-  ```
-  # !!! Adding a swap file is optional, but strongly recommended!
-  # swapDevices = [ { device = "/swapfile"; size = 1024; } ];
-  ```
 * Pin the version of NixOS we are using, so we truly get a deterministic and future-proof build.
 * Is this still true? How can I test it?
   ```
   * Note: The mainline kernel (tested with nixos kernel 4.18.7) does not include support for cpu frequency scaling on the Raspberry Pi. To get higher clock speed, set force_turbo=1 in /boot/config.txt
 
   ```
+* Rename repo to `nixos` or sth.

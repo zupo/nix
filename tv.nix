@@ -20,4 +20,6 @@
     ./features/kodi.nix
   ];
 
+  swapDevices = [ { label = "swap"; }];
+
 }
