@@ -30,32 +30,14 @@ First, we'll do a minimal install of NixOS on your Raspberry Pi. Adding extra so
 ### First boot
 
 1. Put the NixOs SD card into the Pi's SD cart slot and turn it on. If all goes well, you should be dropped into a root shell.
-2. I like to get SSH running ASAP, so that I can use my MacBook's keyboard and terminal emulator to copy over
-commands. I'm a creature of comfort. You can skip this step if you want.
+
+2. Copy over the contents of [`minimal.nix`](https://github.com/zupo/nix/blob/master/minimal.nix) into `/etc/nixos/configuration.nix`.
 
     ```bash
-    [root@nixos:~]# passwd  # to set root password to be able to SSH into the Raspberry Pi
-    [root@nixos:~]# systemctl start sshd  # start SSH service
-    [root@nixos:~]# ifconfig  # to see which IP was assigned to the Raspberry Pi
+    [root@nixos:~]# curl https://raw.githubusercontent.com/zupo/nix/master/minimal.nix > /etc/nixos/configuration.nix
     ```
 
-3. Copy over the contents of [`minimal.nix`](https://github.com/zupo/nix/blob/master/minimal.nix) into `/etc/nixos/configuration.nix`.
-
-    ```bash
-    [root@nixos:~]# nano /etc/nixos/configuration.nix
-
-    { config, pkgs, lib, ... }:
-    {
-      # NixOS wants to enable GRUB by default
-      boot.loader.grub.enable = false;
-
-      # if you have a Raspberry Pi 2 or 3, pick this:
-      boot.kernelPackages = pkgs.linuxPackages_latest;
-
-    ...
-    ```
-
-4. And we're ready to build our minimal configuration.
+3. And we're ready to build our minimal configuration.
 
     ```bash
     [root@nixos:~]# nixos-rebuild switch
@@ -68,7 +50,7 @@ commands. I'm a creature of comfort. You can skip this step if you want.
 
     The first build takes about 10 minutes, consequent ones are faster.
 
-5. Reboot to see it if works.
+4. Reboot to see it if works.
 
 ### Cleanup
 
@@ -83,7 +65,7 @@ At this point, your Raspberry Pi should boot into the minimal NixOS configuratio
 
 # Ready for features
 
-And that's basically it! You have a minimal NixOS running on your Raspberry PI. Now browse `.nix` files in the [`features/` directory](https://github.com/zupo/nix/features), copy their configuration into your `/etc/nixos/configuration.nix` and re-run `nixos-rebuild switch`.
+Now that you have the base NixOS install running on your Raspberry PI you can browse `.nix` files in the [`features/` directory](https://github.com/zupo/nix/features), copy their configuration into your `/etc/nixos/configuration.nix` and re-run `nixos-rebuild switch`.
 
 Let's try one for practice: the home theater software Kodi.
 
@@ -110,9 +92,9 @@ Let's try one for practice: the home theater software Kodi.
 
 ## Where to go from here?
 
-- I really liked the [one hour, hands-on tutorial](https://github.com/brainrape/nixos-tutorial) when starting out. I got the basic knowledge needed to follow the official NixOS documentation.
-
 - Check out the fully-fledged [`tv.nix`](https://github.com/zupo/nix/tree/master/tv.nix) configuration I use on my Raspberry Pi. In there you have static IP configuration, automounting of NAS, importing from other `.nix` files and more.
+
+- I really liked the [one hour, hands-on tutorial](https://github.com/brainrape/nixos-tutorial) when starting out. I got the basic knowledge needed to follow the official NixOS documentation.
 
 - Keep the [cheatsheet](https://github.com/brainrape/nixos-tutorial/blob/master/cheatsheet.md) handy.
 

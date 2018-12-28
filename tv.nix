@@ -2,6 +2,7 @@
 # the TV "smart".
 
 # Usage:
+# $ passwd zupo  # since SSH will be forbidden for root
 # $ cd /etc/nixos && git clone https://github.com/zupo/nix.git
 # $ mv /etc/nixos/configuration.nix /etc/nixos/configuration.nix.bak
 # $ ln -s /etc/nixos/nix/tv.nix /etc/nixos/configuration.nix
