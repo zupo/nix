@@ -20,6 +20,11 @@
     ./features/kodi.nix
   ];
 
+  boot.loader.raspberryPi.firmwareConfig = lib.mkForce ''
+    gpu_mem=256
+    decode_MPG2=${ builtins.readFile /etc/nixos/secrets/mpg2 }
+  '';
+ 
   networking = {
     hostName = "tv";
     interfaces.eth0.ipv4.addresses = [{
@@ -37,7 +42,7 @@
         # this line prevents hanging on network split
         automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
 
-      in ["${automount_opts},credentials=/etc/nixos/smb-secrets"];
+      in ["${automount_opts},credentials=/etc/nixos/secrets/smb"];
     };
 
 
