@@ -20,8 +20,6 @@
     ./features/kodi.nix
   ];
 
-  swapDevices = [ { label = "swap"; }];
-
   networking = {
     hostName = "tv";
     interfaces.eth0.ipv4.addresses = [{

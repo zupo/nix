@@ -19,60 +19,19 @@ The end game is a robust and future-proof Media Center running on a Raspberry Pi
 
 First, we'll do a minimal install of NixOS on your Raspberry Pi. Adding extra software on top of the minimal install is very easy and we'll do it later.
 
-### Flashing the SD card
+### Installing NixOs on the SD card
 
-1. Download `sd-image-aarch64-linux.img` from https://www.cs.helsinki.fi/u/tmtynkky/nixos-arm/installer/.
-2. Use [Etcher](https://www.balena.io/etcher/) to flash the image onto your SD Card. Please use 16GB or bigger, you'll make your life so much easier later on.
+1. Go to https://hydra.nixos.org/search?query=sd_image and find the line that contains `nixos:release-18.09-aarch64`. 18.09 is the current stable version of NixOs.
+2. Click on the `nixos.sd_image.aarch64-linux` part of the line to see the latest builds. Click on the most recent one that has passed successfully (green checkmark).
+3. Click on the link in the `File   sd-image` line. Mine was `nixos-sd-image-18.09beta1819.76aafbf4bf4-aarch64-linux.img` and the URL was https://hydra.nixos.org/build/86448927/download/1/nixos-sd-image-18.09beta1819.76aafbf4bf4-aarch64-linux.img.
+4. Use [Etcher](https://www.balena.io/etcher/) to flash the image onto your SD Card. Please use 8GB or bigger card.
 
-### Creating the swap partition
-
-If you are just testing things out, you can skip this for now. But when you are ready to build a usable Media Center, you should do it. Raspberry Pi comes with only 1GB of RAM and running Kodi (and more) while building a new nixos generation will almost certainly mean you will run out of memory. Happened to me.
-
-1. Download the official [Raspbian](https://www.raspberrypi.org/downloads/raspbian/) image and use Etcher [Etcher](https://www.balena.io/etcher/) to flash it to a *different* SD card (4GB is enough).
-2. Boot the Raspbian and insert your NixOS SD card into a card reader plugged in the Rasperry PI.
-3. Run `parted` to create a swap partition:
-
-    ```bash
-    $ mount
-    ...
-    /dev/sdb2 on /media/pi/NIXOS_SD type ext4 (rw,nosuid,nodev,relatime,data=ordered,uhelper=udisks2)
-    /dev/sdb1 on /media/pi/NIXOS_BOOT type vfat (rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,showexec,utf8,flush,errors=remount-ro,uhelperudisks2)
-    $ umount /dev/sdb1
-    $ umount /dev/sdb2
-
-    $ sudo parted
-    (parted) print
-    GNU Parted 3.2
-    ...
-    Disk /dev/sdb: 16.0GB
-    Sector size (logica/physical): 512B/512B
-    Partition table: msdos
-    Disk Flags:
-
-    Number   Start    End      Size     Type      File system   Flags
-     1       8389kB   134MB    126MB    primary   fat16         boot
-     2       134MB    2359MB   2225MB   primary   ext4
-
-    (parted) mkpart
-    Partition type? primary
-    File system type? linux-swap
-    Start? 14GB
-    End? 100%
-
-    (parted) print
-    ...
-    Number   Start    End      Size     Type      File system     Flags
-     1       8389kB   134MB    126MB    primary   fat16           boot
-     2       134MB    2359MB   2225MB   primary   ext4
-     3       14.0GB   16.0GB   1981MB   primary   linux-swap(v1)  lba
-
-    (parted) quit
 
 ### First boot
 
 1. Put the NixOs SD card into the Pi's SD cart slot and turn it on. If all goes well, you should be dropped into a root shell.
 2. I like to get SSH running ASAP, so that I can use my MacBook's keyboard and terminal emulator to copy over
-commands. I'm a creature of comfort:
+commands. I'm a creature of comfort. You can skip this step if you want.
 
     ```bash
     [root@nixos:~]# passwd  # to set root password to be able to SSH into the Raspberry Pi
@@ -80,29 +39,7 @@ commands. I'm a creature of comfort:
     [root@nixos:~]# ifconfig  # to see which IP was assigned to the Raspberry Pi
     ```
 
-3. Now that we can SSH into the Pi, we can start with some RealWork™. Let's tell nix to use a stable release of NixOS.
-
-    ```bash
-    ~ $ ssh root@<Pi's IP>
-    [root@nixos:~]# nix-channel --list
-    nixos https://nixos.org/channels/nixos-unstable
-
-    # The pre-built ARM image that we downloaded and flashed onto the SD card
-    # is configured to use the bleeding edge NixOS. We don't want that. We're
-    # building a Media Center and we care about stability and future proofing.
-    # Let's use the latest *stable* NixOS release.
-
-    [root@nixos:~]# nix-channel --remove nixos
-    [root@nixos:~]# nix-channel --add https://nixos.org/channels/nixos-18.09 nixos
-
-    [root@nixos:~]# nix-channel --list
-    nixos https://nixos.org/channels/nixos-18.09
-
-    [root@nixos:~]# nix-channel --update
-    # This will take some time, depending on your Internet connection.
-    ```
-
-4. Copy over the contents of [`minimal.nix`](https://github.com/zupo/nix/blob/master/minimal.nix) into `/etc/nixos/configuration.nix`.
+3. Copy over the contents of [`minimal.nix`](https://github.com/zupo/nix/blob/master/minimal.nix) into `/etc/nixos/configuration.nix`.
 
     ```bash
     [root@nixos:~]# nano /etc/nixos/configuration.nix
@@ -118,18 +55,7 @@ commands. I'm a creature of comfort:
     ...
     ```
 
-5. If you followed the advice and [prepared a swap partition in advance](https://github.com/zupo/nix#creating-the-swap-partition) you can now enable it.
-
-    ```bash
-    [root@nixos:~]# mkswap -L swap /dev/mmcblk0p3
-
-    # append the following to your configuration.nix
-    [root@nixos:~]# nano /etc/nixos/configuration.nix
-    ...
-        swapDevices = [ { label = "swap"; }];
-    }
-
-6. And we're ready to build our minimal configuration.
+4. And we're ready to build our minimal configuration.
 
     ```bash
     [root@nixos:~]# nixos-rebuild switch
@@ -140,19 +66,18 @@ commands. I'm a creature of comfort:
     ...
     ```
 
-    Building will take some time and generate [lots of output](https://github.com/zupo/nix/blob/master/minimal.output). For me it took a little over an hour. Remember we told nix we want to use the latest stable release of NixOS, instead of the bleeding edge, so the entire distribution needs to be downloaded, built and configured.
+    The first build takes about 10 minutes, consequent ones are faster.
 
-7. Reboot.
+5. Reboot to see it if works.
 
 ### Cleanup
 
 At this point, your Raspberry Pi should boot into the minimal NixOS configuration defined in [`minimal.nix`](https://github.com/zupo/nix/blob/master/minimal.nix). Let's do some cleanup before we continue.
 
 ```bash
-~ $ ssh root@<Pi's IP>
 [root@nixos:~]# nix-collect-garbage -d  # remove old pre-built configuration and all of its dependencies
 [root@nixos:~]# nixos-rebuild switch  # remove old boot entries
-[root@nixos:~]# reboot
+[root@nixos:~]# reboot  # to be on the safe side
 ```
 
 
@@ -195,12 +120,11 @@ Let's try one for practice: the home theater software Kodi.
 ## Thanks
 
 * [@domenkozar](https://github.com/domenkozar) for not shying away from my endless harassment on IM when I got stuck. Which was often. It truly is a testament to NixOS' design that Domen was able to debug and fix my problems from 2500 kilometers away. And that's only because all "system state" is in the `configuration.nix` file and not sprinkled among tens of opaque locations around the filesystem.
-* [@dezdeg](https://github.com/dezgeg) for providing pre-built images that boot on the Raspberry Pi. No chance I'd be able to do this myself.
+* The authors of [NixOS on ARM](https://nixos.wiki/wiki/NixOS_on_ARM) which is a treasure-trove of tips & tricks.
 * Other folks on the #nixos-aarch64 IRC channel for support and insights.
 
 ## TODO
 
-* Update `configuration.nix` to use minimal.nix and features/.
 * Pin the version of NixOS we are using, so we truly get a deterministic and future-proof build.
 * Is this still true? How can I test it?
   ```
