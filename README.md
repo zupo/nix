@@ -114,3 +114,5 @@ Let's try one for practice: the home theater software Kodi.
 
   ```
 * Rename repo to `nixos` or sth.
+* `arm_control=0x200` in config.txt is deprecated, we should use `arm_64bit`: https://www.raspberrypi.org/documentation/configuration/config-txt/misc.md
+* IRL robot: https://www.instructables.com/id/Video-Calling-on-Raspberry-Pi-3/
