@@ -1,6 +1,6 @@
 # A Raspberry Pi hooked to Kkmoon 7 TFT portable monitor that will be used
-# as a demo/play machine during Niteo IRL#6 in Marrakech. 
-# 
+# as a demo/play machine during Niteo IRL#6 in Marrakech.
+#
 # Usage:
 # $ cd /etc/nixos && git clone https://github.com/zupo/nix.git
 # $ mv /etc/nixos/configuration.nix /etc/nixos/configuration.nix.bak
@@ -9,6 +9,11 @@
 # $ nano /etc/nixos/secrets/nevroni
 # $ truncate -s -1 /etc/nixos/secrets/nevroni
 # $ nixos-rebuild switch
+#
+# TODO:
+# * boot to kiosk mode:
+#    * https://gist.github.com/datakurre/cd29a985351e6b8c9bbc04532e5f9df0
+#    * https://gist.github.com/domenkozar/03a1c3926c8172be0fcc6f567d3ab8ac?fbclid=IwAR3LZ4iIQeSXkw5QwmI_DRQt5SsFp7ApB7J-QoNxa2vNaYDsthOvx8gNJPw
 
 { config, pkgs, lib, ... }:
 {
@@ -33,7 +38,7 @@
     (pkgs.stdenv.mkDerivation {
      name = "broadcom-rpi3-extra";
      src = pkgs.fetchurl {
-     url = 
+     url =
 "https://raw.githubusercontent.com/RPi-Distro/firmware-nonfree/54bab3d/brcm80211/brcm/brcmfmac43430-sdio.txt";
      sha256 = "19bmdd7w0xzybfassn7x4rb30l70vynnw3c80nlapna2k57xwbw7";
      };
