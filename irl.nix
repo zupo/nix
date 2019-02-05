@@ -51,9 +51,8 @@
   ];
   networking.wireless.enable = true;
   networking.wireless.networks = {
-    nevroni = {
-      psk = builtins.readFile /etc/nixos/secrets/nevroni;
-    };
+    nevroni.psk = builtins.readFile /etc/nixos/secrets/nevroni;
+    HUAWEI-B310-HAWDON.psk = builtins.readFile /etc/nixos/secrets/hawdon;
   };
 
 }
