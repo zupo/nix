@@ -123,6 +123,17 @@ Let's try one for practice: the home theater software Kodi.
 * The authors of [NixOS on ARM](https://nixos.wiki/wiki/NixOS_on_ARM) which is a treasure-trove of tips & tricks.
 * Other folks on the #nixos-aarch64 IRC channel for support and insights.
 
+## Tips & Tricks
+
+* Configure static IP internet:
+  
+  ```bash
+  $ ifconfig eth0 192.168.1.2 netmask 255.255.255.0 broadcast 192.168.1.255 up
+  $ route add default gw 192.168.1.1
+  ```
+
+
+
 ## TODO
 
 * Pin the version of NixOS we are using, so we truly get a deterministic and future-proof build.
