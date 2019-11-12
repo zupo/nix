@@ -31,7 +31,7 @@
 {
 
   imports = [
-    ./minimal.nix
+    ./rpi.nix
     ./features/common.nix
     ./features/kodi.nix
   ];

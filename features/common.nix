@@ -46,7 +46,6 @@
     rsync
     screen
     telnet
-    raspberrypi-tools
   ];
 
   environment.etc."gitconfig".text = ''

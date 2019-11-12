@@ -3,6 +3,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+      ./features/common.nix
       ./vultr/hardware-configuration.nix
     ];
 

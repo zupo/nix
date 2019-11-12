@@ -19,7 +19,7 @@
 {
 
   imports = [
-    ./minimal.nix
+    ./rpi.nix
     ./features/common.nix
   ];
 
