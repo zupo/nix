@@ -13,12 +13,12 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/d5bcc6b5-fdf4-42cf-aa77-4870be68b06c";
+    { device = "/dev/disk/by-uuid/7353aae7-0765-47da-ba1e-cb6d4838b556";
       fsType = "ext4";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/0676d43b-c14f-4b5a-8e5e-c439c1d65215"; }
+    [ { device = "/dev/disk/by-uuid/111868c5-83d6-41bc-bec7-520fa2308d64"; }
     ];
 
   nix.maxJobs = lib.mkDefault 2;
