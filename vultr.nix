@@ -16,6 +16,7 @@
 #     $ mv configuration.nix configuration.nix.bak
 #     $ mv hardware-configuration.nix vultr/hardware-configuration.nix
 #     $ ln -s vultr.nix configuration.nix
+#     $ vim secrets/email && truncate -s -1 secrets/email && git update-index --assume-unchanged secrets/email
 #     $ passwd  # set a new root password
 #     $ nixos-rebuild switch
 # $ ssh zupo@<IP>  # no password should be required, login with pubkey
