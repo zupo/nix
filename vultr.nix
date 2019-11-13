@@ -6,6 +6,8 @@
 #   $ curl https://eipi.xyz/vultr.sh | bash
 # - Click Settings -> Custom ISO -> Remove ISO
 # $ ssh root@<IP>  # password is "qqcTch4m"
+#   $ nix-channel --add https://nixos.org/channels/nixos-19.09 nixos
+#   $  nixos-rebuild switch --upgrade
 #   $ vim /etc/nixos/configuration.nix  # add git to environment.systemPackages
 #   $ nixos-rebuild switch
 #   $ cd /etc/nixos
@@ -36,6 +38,4 @@
   boot.loader.grub.enable = true;
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
-
-  system.stateVersion = "18.09";
 }
