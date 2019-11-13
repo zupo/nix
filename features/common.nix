@@ -95,7 +95,7 @@
       autocorrect = 1
 
     [credential]
-      helper = cache --timeout=3600
+      helper = cache --timeout=86400
   '';
 
   environment.etc."gitignore".text = ''
