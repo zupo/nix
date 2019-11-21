@@ -25,6 +25,7 @@
 #     $ nixos-rebuild switch
 # $ ssh zupo@<IP>  # no password should be required, login with pubkey
 #   $ su -
+#   $ passwd kai
 #   $ reboot
 
 { config, pkgs, lib, ... }:
@@ -83,4 +84,8 @@
     isNormalUser = true;
   };
 
+  # project dependencies
+  environment.systemPackages = with pkgs; [
+    pkgs.python37Full
+  ];
 }
