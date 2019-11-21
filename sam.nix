@@ -86,7 +86,6 @@
 
   # project dependencies
   environment.systemPackages = with pkgs; [
-    #(python37.withPackages(ps: with ps; [ fire.overrideAttrs (old: { doInstallCheck = false; }) regex requests tqdm numpy tensorflow ]))
-    (python37.withPackages(ps: with ps; [ regex requests tqdm numpy tensorflow ]))
+    (python37.withPackages(ps: with ps; [ (fire.overrideAttrs (old: { doInstallCheck = false; })) regex requests tqdm numpy tensorflow ]))
   ];
 }
