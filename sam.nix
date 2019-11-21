@@ -27,8 +27,10 @@
 #   $ su -
 #   $ reboot
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 {
+  system.stateVersion = "19.03"; # No touchy!
+
   imports =
     [ # Include the results of the hardware scan.
       ./sam/hardware-configuration.nix
@@ -68,5 +70,17 @@
   networking.defaultGateway6 = { address = "fe80::1"; interface = "enp0s31f6"; };
   networking.nameservers = [ "213.133.98.98" "213.133.99.99" "213.133.100.100" ];  # https://wiki.hetzner.de/index.php/Hetzner_Standard_Name_Server/en
 
-  system.stateVersion = "19.03"; # No touchy!
+  # I am not the only one working on this server
+  users.users.nkk0 = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [ "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDnSx48d8cEphXNA9+waKfgasT4z/ppCJNHTwy5hmsFo6HFGY72UWxlknt23BPD0ZHZdIZwAFGhkMF+vI76EdHwGp6JjIicd7eUu4gvUIdCqoolNyTuhRCHo2gUokcbbwUtb484ZiITuPkn7ixOVLigX6uHD5t3fyHY6AixENbh/YX1PiIxPsyiJ5Rt9YKGnB5py2RfIxcyAeUyhFGW1anH3J/cq8hmgooiHqD875Uo/ejbJ4BvasIkGufn6nhG9tPPcWA0mTcYoiNFwfaqmyFNCLBRMHuGmwyiSKQb8AtVefFaRD2OQ9ut/aJYlty+ZkFjY3ObXH49ak0T/2qRipFx" ];
+  };
+
+  # app user
+  services.openssh.passwordAuthentication = lib.mkForce true;  # TODO: add support for pubkey auth from app
+  users.users.kai = {
+    isNormalUser = true;
+  };
+
 }
