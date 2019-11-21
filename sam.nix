@@ -17,7 +17,7 @@
 #     $ git remote add origin https://github.com/zupo/nix.git
 #     $ git pull
 #     $ git checkout master
-#     $ mv configuration.nix configuration.nix.bak
+#     $ mv configuration.nix configuration.nix.orig
 #     $ mv hardware-configuration.nix sam/hardware-configuration.nix
 #     $ ln -s sam.nix configuration.nix
 #     $ vim secrets/email && truncate -s -1 secrets/email && git update-index --assume-unchanged secrets/email
@@ -34,36 +34,23 @@
       ./sam/hardware-configuration.nix
       ./features/common.nix
     ];
-  # Use GRUB2 as the boot loader.
-  # We don't use systemd-boot because Hetzner uses BIOS legacy boot.
+  
+  # Use GRUB2 as the boot loader because Hetzner uses BIOS legacy boot.
   boot.loader.systemd-boot.enable = true;
   boot.loader.grub = {
     enable = true;
     efiSupport = false;
     devices = [ "/dev/sda" "/dev/sdb" ];
   };
+
+  # Set hostname for networrking and RAID1
   networking.hostName = "sam";
-  # The mdadm RAID1s were created with 'mdadm --create ... --homehost=hetzner',
-  # but the hostname for each machine may be different, and mdadm's HOMEHOST
-  # setting defaults to '<system>' (using the system hostname).
-  # This results mdadm considering such disks as "foreign" as opposed to
-  # "local", and showing them as e.g. '/dev/md/hetzner:data0'
-  # instead of '/dev/md/data0'.
-  # This is mdadm's protection against accidentally putting a RAID disk
-  # into the wrong machine and corrupting data by accidental sync, see
-  # https://bugzilla.redhat.com/show_bug.cgi?id=606481#c14 and onward.
-  # We set the HOMEHOST manually go get the short '/dev/md' names,
-  # and so that things look and are configured the same on all such
-  # machines irrespective of host names.
-  # We do not worry about plugging disks into the wrong machine because
-  # we will never exchange disks between machines.
   environment.etc."mdadm.conf".text = ''
     HOMEHOST sam
   '';
-  # The RAIDs are assembled in stage1, so we need to make the config
-  # available there.
   boot.initrd.mdadmConf = config.environment.etc."mdadm.conf".text;
-  # Network (Hetzner uses static IP assignments, and we don't use HDCP here)
+
+  # Network
   networking.useDHCP = false;
   networking.interfaces."enp0s31f6".ipv4.addresses = [
     {
@@ -79,15 +66,7 @@
   ];
   networking.defaultGateway = "95.216.240.193";
   networking.defaultGateway6 = { address = "fe80::1"; interface = "enp0s31f6"; };
-  networking.nameservers = [ "8.8.8.8" ];
+  networking.nameservers = [ "213.133.98.98" "213.133.99.99" "213.133.100.100" ];  # https://wiki.hetzner.de/index.php/Hetzner_Standard_Name_Server/en
 
-  # This value determines the NixOS release with which your system is to be
-  # compatible, in order to avoid breaking some software such as database
-  # servers. You should change this only after NixOS release notes say you
-  # should.
-  system.stateVersion = "19.03"; # Did you read the comment?
-
-  environment.systemPackages = with pkgs; [
-    git
-  ];
+  system.stateVersion = "19.03"; # No touchy!
 }
