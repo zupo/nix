@@ -85,7 +85,9 @@
   };
 
   # project dependencies
+  nixpkgs.config.allowUnfree = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
   environment.systemPackages = with pkgs; [
-    (python37.withPackages(ps: with ps; [ (fire.overrideAttrs (old: { doInstallCheck = false; })) regex requests tqdm numpy tensorflow ]))
+    (python37.withPackages(ps: with ps; [ (fire.overrideAttrs (old: { doInstallCheck = false; })) regex requests tqdm numpy tensorflowWithCuda ]))
   ];
 }
