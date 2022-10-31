@@ -31,10 +31,10 @@ First, we'll do a minimal install of NixOS on your Raspberry Pi. Adding extra so
 
 1. Put the NixOs SD card into the Pi's SD cart slot and turn it on. If all goes well, you should be dropped into a root shell.
 
-2. Copy over the contents of [`minimal.nix`](https://github.com/zupo/nix/blob/master/minimal.nix) into `/etc/nixos/configuration.nix`.
+2. Copy over the contents of [`rpi.nix`](https://github.com/zupo/nix/blob/master/rpi.nix) into `/etc/nixos/configuration.nix`.
 
     ```bash
-    [root@nixos:~]# curl https://raw.githubusercontent.com/zupo/nix/master/minimal.nix > /etc/nixos/configuration.nix
+    [root@nixos:~]# curl https://raw.githubusercontent.com/zupo/nix/master/rpi.nix > /etc/nixos/configuration.nix
     ```
 
 3. And we're ready to build our minimal configuration.
@@ -54,7 +54,7 @@ First, we'll do a minimal install of NixOS on your Raspberry Pi. Adding extra so
 
 ### Cleanup
 
-At this point, your Raspberry Pi should boot into the minimal NixOS configuration defined in [`minimal.nix`](https://github.com/zupo/nix/blob/master/minimal.nix). Let's do some cleanup before we continue.
+At this point, your Raspberry Pi should boot into the minimal NixOS configuration defined in [`rpi.nix`](https://github.com/zupo/nix/blob/master/rpi.nix). Let's do some cleanup before we continue.
 
 ```bash
 [root@nixos:~]# nix-collect-garbage -d  # remove old pre-built configuration and all of its dependencies
